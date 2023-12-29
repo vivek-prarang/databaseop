@@ -1,24 +1,24 @@
-import os
-import csv
-import threading
+from asyncio.windows_events import NULL
+from multiprocessing import connection
 from config import Config
 from flask import Flask, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 from Oprations.csvscraper import CSV_Scraper 
+from Oprations.db import Model as model
 
 app = Flask(__name__)
-csvsr = CSV_Scraper()
+cssscr=CSV_Scraper()
 
-def hello(a):
-    return a
 
-@app.route('/')
-def index():
-    loop_limit=101
-    thread = threading.Thread(target=hello, args=(2,))
-    thread.start()
-    return "CSV scraping started. Check your console for updates."
 
+@app.route('/', methods=['GET', 'POST'])
+def validate_titles():
+    if request.method == 'POST':
+        titles, number_of_rows = cssscr.scrape_titles(request)
+        if number_of_rows is None:
+            return render_template('validate-datatype.html',message="Invalid Titles")
+        return render_template('validate-datatype.html', headers=titles, row_count=number_of_rows)
+    return render_template('validate-datatype.html')
 
 if __name__ == "__main__":
     app.run(debug=True)

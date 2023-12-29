@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block title %}Database Oprations:{% endblock %}
+
+{% block main %}
+<form method="POST" enctype="multipart/form-data">
+    <label for="file">Choose a CSV file:</label>
+    <input type="file" name="file" accept=".csv" required>
+    <button type="submit">Submit</button>
+</form>
+<hr>
+{% if message %}
+    <h6 class="text-danger">{{message}}</6>
+{% endif %}
+{% if row_count %}   
+    <p class="h6 text-success">Number of Rows: {{ row_count }}</p>
+{% endif %}
+
+{% if headers %}
+        <h4>CSV Information and Data Types</h4>
+        <table border="1" class="table table-sm">
+            <thead>
+                <tr>
+                    
+                    <th>Title</th>
+                    <th>Data Type</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for title in headers %}
+                    <tr>                       
+                        <td class="ps-2"><strong>{{ title }}</strong></td>
+                        <td class="ps-1"> <select class="form-control w-50" name="{{ title }}">                            
+                            <option value="1">String</option>
+                            <option value="2">Number</option>                                                     
+                        </td>
+                        <td> </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+
+  
+{% endblock %}
