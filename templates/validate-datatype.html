@@ -41,5 +41,12 @@
         </table>
     {% endif %}
 
-  
+    {% for row in verticals %}
+    <tr>
+        <td>{{ row.1 }}</td>
+        <br><br>
+       
+    </tr>
+    {% endfor %}
+   
 {% endblock %}

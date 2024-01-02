@@ -7,20 +7,24 @@ from Oprations.db import Model
 app = Flask(__name__)
 cssscr=CSV_Scraper()
 model=Model()
-
+from flask_sqlalchemy import SQLAlchemy
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:@localhost/plannerdb'
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+db = SQLAlchemy(app)
 @app.route('/', methods=['GET', 'POST'])
 def validate_titles():
     if request.method == 'POST':
         titles, number_of_rows = cssscr.scrape_titles(request)
         try:
             verticals=model.get_verticals()
-            print(verticals[0][1])            
+                        
         except:
             return render_template('validate-datatype.html',message="Verticals List is not available")            
         if number_of_rows is None:
             return render_template('validate-datatype.html',message="Invalid Titles")
         return render_template('validate-datatype.html', headers=titles, row_count=number_of_rows,verticals=verticals)
     return render_template('validate-datatype.html')
+
 
 if __name__ == "__main__":
     app.run(debug=True)
